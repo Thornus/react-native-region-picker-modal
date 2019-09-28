@@ -6,7 +6,7 @@
   "types": "src/CountryPicker.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xcarpentier/react-native-country-picker-modal.git"
+    "url": "git+https://github.com/Thornus/react-native-region-picker-modal.git"
   },
   "scripts": {
     "lint": "eslint ./src",
@@ -28,12 +28,9 @@
     "country",
     "flag"
   ],
-  "author": "Xavier Carpentier <contact@xaviercarpentier.com> (https://xaviercarpentier.com/)",
+  "author": "Thornus <lucapokecampione@gmail.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/xcarpentier/react-native-country-picker-modal/issues"
-  },
-  "homepage": "https://github.com/xcarpentier/react-native-country-picker-modal#readme",
+  "homepage": "https://github.com/Thornus/react-native-region-picker-modal#readme",
   "dependencies": {
     "country-region-data": "^1.5.0",
     "fuse.js": "2.6.2",
