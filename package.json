@@ -24,9 +24,10 @@
   "keywords": [
     "react-native",
     "components",
-    "country-picker",
+    "region-picker",
     "country",
-    "flag"
+    "region",
+    "region-selection"
   ],
   "author": "Thornus <lucapokecampione@gmail.com>",
   "license": "MIT",
