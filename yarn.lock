@@ -1460,6 +1460,11 @@ core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
 
+country-region-data@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/country-region-data/-/country-region-data-1.5.0.tgz#f5528603783eb2c798839fed2b6d5635c6b63efd"
+  integrity sha512-rA7Vk6lrSP4Vdo4s6Qs/oHgdxlY0wextKcIzeVgESo/P55d211LAwPbWtZs45gd/iiq70SRj2iJRAaYrvj8CoQ==
+
 crc@3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/crc/-/crc-3.3.0.tgz#fa622e1bc388bf257309082d6b65200ce67090ba"
@@ -3782,8 +3787,9 @@ merge-stream@^1.0.1:
     readable-stream "^2.0.1"
 
 merge@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/merge/-/merge-1.2.0.tgz#7531e39d4949c281a66b8c5a6e0265e8b05894da"
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/merge/-/merge-1.2.1.tgz#38bebf80c3220a8a487b6fcfb3941bb11720c145"
+  integrity sha512-VjFo4P5Whtj4vsLzsYBu5ayHhoHJ0UqNm7ibvShmbmoz7tGi0vXaoJbGdB+GmDMLUdg8DpQXEIeVDAe8MaABvQ==
 
 method-override@~2.3.5:
   version "2.3.10"
