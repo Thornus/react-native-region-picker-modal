@@ -20,13 +20,13 @@ import {
 
 import Fuse from 'fuse.js'
 
-import cca2List from '../data/cca2.json'
+import countryRegionData from 'country-region-data';
 import { getHeightPercent } from './ratio'
 import CloseButton from './CloseButton'
-import countryPickerStyles from './CountryPicker.style'
+import regionPickerStyles from './RegionPicker.style'
 import KeyboardAvoidingView from './KeyboardAvoidingView'
 
-let countries = null
+let regions = null
 let Emoji = null
 let styles = {}
 
@@ -37,40 +37,38 @@ const FLAG_TYPES = {
   emoji: 'emoji'
 }
 
-const setCountries = flagType => {
+const setRegions = flagType => {
   if (typeof flagType !== 'undefined') {
     isEmojiable = flagType === FLAG_TYPES.emoji
   }
 
   if (isEmojiable) {
-    countries = require('../data/countries-emoji.json')
+    regions = require('../data/countries-emoji.json')
     Emoji = require('./emoji').default
   } else {
-    countries = require('../data/countries.json')
+    regions = require('../data/countries.json')
     Emoji = <View />
   }
 }
 
-setCountries()
+setRegions()
 
-export const getAllCountries = () =>
-  cca2List.map(cca2 => ({ ...countries[cca2], cca2 }))
-
-export default class CountryPicker extends Component {
+export default class RegionPicker extends Component {
   static propTypes = {
     cca2: PropTypes.string.isRequired,
+    selectedRegion: PropTypes.string.isRequired,
     translation: PropTypes.string,
     onChange: PropTypes.func.isRequired,
     onClose: PropTypes.func,
     closeable: PropTypes.bool,
     filterable: PropTypes.bool,
     children: PropTypes.node,
-    countryList: PropTypes.array,
-    excludeCountries: PropTypes.array,
+    regionList: PropTypes.array,
+    excludeRegions: PropTypes.array,
     styles: PropTypes.object,
     filterPlaceholder: PropTypes.string,
     autoFocusFilter: PropTypes.bool,
-    // to provide a functionality to disable/enable the onPress of Country Picker.
+    // to provide a functionality to disable/enable the onPress of Region Picker.
     disabled: PropTypes.bool,
     filterPlaceholderTextColor: PropTypes.string,
     closeButtonImage: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
@@ -80,16 +78,14 @@ export default class CountryPicker extends Component {
     hideAlphabetFilter: PropTypes.bool,
     hideCountryFlag: PropTypes.bool,
     renderFilter: PropTypes.func,
-    showCallingCode: PropTypes.bool,
     filterOptions: PropTypes.object,
-    showCountryNameWithFlag: PropTypes.bool
+    showRegionNameWithFlag: PropTypes.bool
   }
 
   static defaultProps = {
     translation: 'eng',
-    countryList: cca2List,
     hideCountryFlag: false,
-    excludeCountries: [],
+    excludeRegions: [],
     filterPlaceholder: 'Filter',
     autoFocusFilter: true,
     transparent: false,
@@ -98,10 +94,11 @@ export default class CountryPicker extends Component {
 
   static renderEmojiFlag(cca2, emojiStyle) {
     return (
-      <Text style={[countryPickerStyles.emojiFlag, emojiStyle]} allowFontScaling={false}>
-        {cca2 !== '' && countries[cca2.toUpperCase()] ? (
-          <Emoji name={countries[cca2.toUpperCase()].flag} />
-        ) : null}
+      <Text style={[regionPickerStyles.emojiFlag, emojiStyle]} allowFontScaling={false}>
+        { // TO DO: pass right string to show flag
+        /* {cca2 !== '' && regions[cca2.toUpperCase()] ? (
+          <Emoji name={regions[cca2.toUpperCase()].flag} />
+        ) : null} */}
       </Text>
     )
   }
@@ -110,32 +107,32 @@ export default class CountryPicker extends Component {
     return cca2 !== '' ? (
       <Image
         resizeMode={'contain'}
-        style={[countryPickerStyles.imgStyle, imageStyle]}
-        source={{ uri: countries[cca2].flag }}
+        style={[regionPickerStyles.imgStyle, imageStyle]}
+        source={{ uri: regions[cca2].flag }}
       />
     ) : null
   }
 
   static renderFlag(cca2, itemStyle, emojiStyle, imageStyle) {
     return (
-      <View style={[countryPickerStyles.itemCountryFlag, itemStyle]}>
+      <View style={[regionPickerStyles.itemCountryFlag, itemStyle]}>
         {isEmojiable
-          ? CountryPicker.renderEmojiFlag(cca2, emojiStyle)
-          : CountryPicker.renderImageFlag(cca2, imageStyle)}
+          ? RegionPicker.renderEmojiFlag(cca2, emojiStyle)
+          : RegionPicker.renderImageFlag(cca2, imageStyle)}
       </View>
     )
   }
 
-  static renderFlagWithName(cca2,countryName, itemStyle, emojiStyle, imageStyle) {
+  static renderFlagWithName(cca2, regionName, itemStyle, emojiStyle, imageStyle) {
     return (
       <View style={{flexDirection:'row', flexWrap:'wrap',alignItems: "center",}}>
-        <View style={[countryPickerStyles.itemCountryFlag, itemStyle]}>
+        <View style={[regionPickerStyles.itemCountryFlag, itemStyle]}>
           {isEmojiable
-            ? CountryPicker.renderEmojiFlag(cca2, emojiStyle)
-            : CountryPicker.renderImageFlag(cca2, imageStyle)}
+            ? RegionPicker.renderEmojiFlag(cca2, emojiStyle)
+            : RegionPicker.renderImageFlag(cca2, imageStyle)}
 
         </View>
-        <Text style={{fontSize:16}}>{countryName}</Text>
+        <Text style={{fontSize:16}}>{regionName}</Text>
       </View>
     )
   }
@@ -144,47 +141,39 @@ export default class CountryPicker extends Component {
     super(props)
     this.openModal = this.openModal.bind(this)
 
-    setCountries(props.flagType)
-    let countryList = [...props.countryList]
-    const excludeCountries = [...props.excludeCountries]
+    setRegions(props.flagType)
+    let regionList = [...countryRegionData.find(country => country.countryShortCode === props.cca2).regions]
+    regions = regionList
 
-    excludeCountries.forEach(excludeCountry => {
-      const index = countryList.indexOf(excludeCountry)
+    const excludeRegions = [...props.excludeRegions]
+
+    excludeRegions.forEach(excludeRegion => {
+      const index = regionList.indexOf(excludeRegion)
 
       if (index !== -1) {
-        countryList.splice(index, 1)
+        regionList.splice(index, 1)
       }
     })
 
-    // Sort country list
-    countryList = countryList
-      .map(c => [c, this.getCountryName(countries[c])])
-      .sort((a, b) => {
-        if (a[1] < b[1]) return -1
-        if (a[1] > b[1]) return 1
-        return 0
-      })
-      .map(c => c[0])
-
     this.state = {
       modalVisible: false,
-      cca2List: countryList,
-      flatListMap: countryList.map(n => ({ key: n })),
-      dataSource: countryList,
+      regionList,
+      flatListMap: regionList.map(n => ({ key: n })),
+      dataSource: regionList,
       filter: '',
-      letters: this.getLetters(countryList)
+      letters: this.getLetters(regionList)
     }
 
     if (this.props.styles) {
-      Object.keys(countryPickerStyles).forEach(key => {
+      Object.keys(regionPickerStyles).forEach(key => {
         styles[key] = StyleSheet.flatten([
-          countryPickerStyles[key],
+          regionPickerStyles[key],
           this.props.styles[key]
         ])
       })
       styles = StyleSheet.create(styles)
     } else {
-      styles = countryPickerStyles
+      styles = regionPickerStyles
     }
 
     const options = Object.assign({
@@ -194,14 +183,14 @@ export default class CountryPicker extends Component {
       distance: 100,
       maxPatternLength: 32,
       minMatchCharLength: 1,
-      keys: ['name', 'callingCode'],
+      keys: ['name'],
       id: 'id'
     }, this.props.filterOptions);
     this.fuse = new Fuse(
-      countryList.reduce(
+      regionList.reduce(
         (acc, item) => [
           ...acc,
-          { id: item, name: this.getCountryName(countries[item]), callingCode: this.getCallingCode(countries[item]) }
+          { id: item, name: this.getRegionName(this.props.selectedRegion) }
         ],
         []
       ),
@@ -209,28 +198,31 @@ export default class CountryPicker extends Component {
     )
   }
 
-componentDidUpdate (prevProps) {
-    if (prevProps.countryList !== this.props.countryList) {
-      this.setState({
-        cca2List: nextProps.countryList,
-        dataSource: nextProps.countryList
-      })
+  componentDidUpdate (prevProps) {
+      if (prevProps.cca2 !== this.props.cca2) {
+        let regionList = [...countryRegionData.find(country => country.countryShortCode === this.props.cca2).regions]
+        regions = regionList
+        console.log('didUpdate', regions)
+        this.setState({
+          cca2: this.props.cca2,
+          dataSource: regionList,
+          flatListMap: regionList.map(n => ({ key: n }))
+        })
+      }
     }
-  }
 
-  onSelectCountry(cca2) {
+  onSelectRegion(selectedRegion) {
     this.setState({
       modalVisible: false,
       filter: '',
-      dataSource: this.state.cca2List,
-      flatListMap: this.state.cca2List.map(n => ({ key: n }))
+      dataSource: this.state.regionList,
+      flatListMap: this.state.regionList.map(n => ({ key: n }))
     })
 
     this.props.onChange({
-      cca2,
-      ...countries[cca2],
+      selectedRegion,
       flag: undefined,
-      name: this.getCountryName(countries[cca2])
+      name: this.getRegionName(selectedRegion)
     })
   }
 
@@ -238,23 +230,20 @@ componentDidUpdate (prevProps) {
     this.setState({
       modalVisible: false,
       filter: '',
-      dataSource: this.state.cca2List
+      dataSource: regions
     })
     if (this.props.onClose) {
       this.props.onClose()
     }
   }
 
-  getCountryName(country, optionalTranslation) {
-    if (!country) {
-      return ''
-    }
+  getRegionName(selectedRegion, optionalTranslation) {
     const translation = optionalTranslation || this.props.translation || 'eng'
-    return country.name[translation] || country.name.common
-  }
-  
-  getCallingCode(country) {
-    return country.callingCode
+
+    //find region based on selectedRegion (region code) else default to first region
+    let region = regions.find(region => region.shortCode === selectedRegion) || regions[0]
+
+    return region.name
   }
 
   setVisibleListHeight(offset) {
@@ -266,7 +255,7 @@ componentDidUpdate (prevProps) {
       list.reduce(
         (acc, val) => ({
           ...acc,
-          [this.getCountryName(countries[val])
+          [this.getRegionName(this.props.selectedRegion)
             .slice(0, 1)
             .toUpperCase()]: ''
         }),
@@ -277,18 +266,18 @@ componentDidUpdate (prevProps) {
 
   openModal = this.openModal.bind(this)
 
-  // dimensions of country list and window
+  // dimensions of region list and window
   itemHeight = getHeightPercent(7)
-  listHeight = countries.length * this.itemHeight
+  listHeight = regions.length * this.itemHeight
 
   openModal() {
     this.setState({ modalVisible: true })
   }
 
   scrollTo(letter) {
-    // find position of first country that starts with letter
-    const index = this.state.cca2List
-      .map(country => this.getCountryName(countries[country])[0])
+    // find position of first region that starts with letter
+    const index = regions
+      .map(region => this.getRegionName(this.props.selectedRegion))
       .indexOf(letter)
     if (index === -1) {
       return
@@ -304,28 +293,26 @@ componentDidUpdate (prevProps) {
   }
 
   handleFilterChange = value => {
-    const filteredCountries =
-      value === '' ? this.state.cca2List : this.fuse.search(value)
+    const filteredRegions =
+      value === '' ? regions : this.fuse.search(value)
     this._flatList.scrollToOffset({ offset: 0 });
 
     this.setState({
       filter: value,
-      dataSource: filteredCountries,
-      flatListMap: filteredCountries.map(n => ({ key: n }))
+      dataSource: filteredRegions,
+      flatListMap: filteredRegions.map(n => ({ key: n }))
     })
   }
 
-  renderCountry(cca2, index) {
-    const country = countries[cca2];
-
+  renderRegion(selectedRegion, index) {
     return (
       <TouchableOpacity
         key={index}
-        onPress={() => this.onSelectCountry(cca2)}
+        onPress={() => this.onSelectRegion(selectedRegion)}
         activeOpacity={0.99}
-        testID={`country-selector-${country.name.common}`}
+        testID={`country-selector-${this.getRegionName(selectedRegion)}`}
       >
-        {this.renderCountryDetail(cca2)}
+        {this.renderRegionDetail(selectedRegion)}
       </TouchableOpacity>
     )
   }
@@ -347,21 +334,17 @@ componentDidUpdate (prevProps) {
     )
   }
 
-  renderCountryDetail(cca2) {
-    const country = countries[cca2]
+  renderRegionDetail(selectedRegion) {
     return (
       <View style={styles.itemCountry}>
         {!this.props.hideCountryFlag &&
-          CountryPicker.renderFlag(cca2,
+          RegionPicker.renderFlag(selectedRegion,
                 styles.itemCountryFlag,
                 styles.emojiFlag,
                 styles.imgStyle)}
         <View style={styles.itemCountryName}>
           <Text style={styles.countryName} allowFontScaling={false}>
-            {this.getCountryName(country)}
-            {this.props.showCallingCode &&
-              country.callingCode &&
-              ` (+${country.callingCode})`}
+            {this.getRegionName(selectedRegion)}
           </Text>
         </View>
       </View>
@@ -404,18 +387,19 @@ componentDidUpdate (prevProps) {
           onPress={() => this.setState({ modalVisible: true })}
           activeOpacity={0.7}
         >
+          {console.log('da selectedRegion', this.props.selectedRegion)}
           {this.props.children ? (
             this.props.children
           ) : (
             <View
               style={[styles.touchFlag, { marginTop: isEmojiable ? 0 : 5 }]}
             >
-              {this.props.showCountryNameWithFlag && CountryPicker.renderFlagWithName(this.props.cca2,this.getCountryName(countries[this.props.cca2]),
+              {this.props.showRegionNameWithFlag && RegionPicker.renderFlagWithName(this.props.cca2, this.getRegionName(this.props.selectedRegion),
                 styles.itemCountryFlag,
                 styles.emojiFlag,
                 styles.imgStyle)}
 
-              {!this.props.showCountryNameWithFlag && CountryPicker.renderFlag(this.props.cca2,
+              {!this.props.showRegionNameWithFlag && RegionPicker.renderFlag(this.props.cca2,
                 styles.itemCountryFlag,
                 styles.emojiFlag,
                 styles.imgStyle)}
@@ -441,6 +425,7 @@ componentDidUpdate (prevProps) {
             </View>
             <KeyboardAvoidingView behavior="padding">
               <View style={styles.contentContainer}>
+              {console.log('da flatListMap', this.state.flatListMap)}
                 <FlatList
                   testID="list-countries"
                   keyboardShouldPersistTaps="handled"
@@ -448,8 +433,8 @@ componentDidUpdate (prevProps) {
                   ref={flatList => (this._flatList = flatList)}
                   initialNumToRender={30}
                   onScrollToIndexFailed={()=>{}}
-                  renderItem={country => this.renderCountry(country.item.key)}
-                  keyExtractor={(item) => item.key}
+                  renderItem={(region, index) => this.renderRegion(region.item.key.shortCode, index)}
+                  keyExtractor={(item, index) => index}
                   getItemLayout={(data, index) => (
                     { length: this.itemHeight, offset: this.itemHeight * index, index }
                   )}
