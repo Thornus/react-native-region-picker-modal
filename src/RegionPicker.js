@@ -202,7 +202,7 @@ export default class RegionPicker extends Component {
       if (prevProps.cca2 !== this.props.cca2) {
         let regionList = [...countryRegionData.find(country => country.countryShortCode === this.props.cca2).regions]
         regions = regionList
-        console.log('didUpdate', regions)
+        
         this.setState({
           cca2: this.props.cca2,
           dataSource: regionList,
@@ -387,7 +387,6 @@ export default class RegionPicker extends Component {
           onPress={() => this.setState({ modalVisible: true })}
           activeOpacity={0.7}
         >
-          {console.log('da selectedRegion', this.props.selectedRegion)}
           {this.props.children ? (
             this.props.children
           ) : (
@@ -425,7 +424,6 @@ export default class RegionPicker extends Component {
             </View>
             <KeyboardAvoidingView behavior="padding">
               <View style={styles.contentContainer}>
-              {console.log('da flatListMap', this.state.flatListMap)}
                 <FlatList
                   testID="list-countries"
                   keyboardShouldPersistTaps="handled"
