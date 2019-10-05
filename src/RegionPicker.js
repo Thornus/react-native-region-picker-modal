@@ -307,7 +307,7 @@ export default class RegionPicker extends Component {
   renderRegion(selectedRegion, index) {
     return (
       <TouchableOpacity
-        key={index}
+        key={index.toString()}
         onPress={() => this.onSelectRegion(selectedRegion)}
         activeOpacity={0.99}
         testID={`country-selector-${this.getRegionName(selectedRegion)}`}
@@ -321,7 +321,7 @@ export default class RegionPicker extends Component {
     return (
       <TouchableOpacity
         testID={`letter-${letter}`}
-        key={index}
+        key={index.toString()}
         onPress={() => this.scrollTo(letter)}
         activeOpacity={0.6}
       >
@@ -432,7 +432,7 @@ export default class RegionPicker extends Component {
                   initialNumToRender={30}
                   onScrollToIndexFailed={()=>{}}
                   renderItem={(region, index) => this.renderRegion(region.item.key.shortCode, index)}
-                  keyExtractor={(item, index) => index}
+                  keyExtractor={(item, index) => index.toString()}
                   getItemLayout={(data, index) => (
                     { length: this.itemHeight, offset: this.itemHeight * index, index }
                   )}
