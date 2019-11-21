@@ -23,7 +23,7 @@ import Fuse from 'fuse.js'
 import countryRegionData from 'country-region-data';
 import { getHeightPercent } from './ratio'
 import CloseButton from './CloseButton'
-import createRegionPickerStyles from './RegionPicker.style'
+import createRegionPickerStyles from './createRegionPickerStyles'
 import KeyboardAvoidingView from './KeyboardAvoidingView'
 
 let regions = null
