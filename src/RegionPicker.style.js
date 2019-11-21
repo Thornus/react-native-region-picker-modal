@@ -1,7 +1,17 @@
 import { StyleSheet, PixelRatio } from 'react-native'
 import { getHeightPercent } from './ratio'
 
-export default StyleSheet.create({
+export default function createRegionPickerStyles(customStyles) {
+  let stylesObject = defaultStyles;
+
+  if(customStyles) {
+    stylesObject = Object.assign({}, defaultStyles, customStyles);
+  }
+
+  StyleSheet.create(stylesObject);
+};
+
+let defaultStyles = {
   container: {},
   
   modalContainer: {
@@ -119,4 +129,4 @@ export default StyleSheet.create({
     width: 24,
     resizeMode: 'contain'
   }
-})
+};
