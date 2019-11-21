@@ -139,6 +139,9 @@ export default class RegionPicker extends Component {
 
   constructor(props) {
     super(props)
+
+    regionPickerStyles = Object.assign({}, regionPickerStyles, this.props.customStyles) 
+
     this.openModal = this.openModal.bind(this)
 
     setRegions(props.flagType)
@@ -199,17 +202,17 @@ export default class RegionPicker extends Component {
   }
 
   componentDidUpdate (prevProps) {
-      if (prevProps.cca2 !== this.props.cca2) {
-        let regionList = [...countryRegionData.find(country => country.countryShortCode === this.props.cca2).regions]
-        regions = regionList
-        
-        this.setState({
-          cca2: this.props.cca2,
-          dataSource: regionList,
-          flatListMap: regionList.map(n => ({ key: n }))
-        })
-      }
+    if (prevProps.cca2 !== this.props.cca2) {
+      let regionList = [...countryRegionData.find(country => country.countryShortCode === this.props.cca2).regions]
+      regions = regionList
+      
+      this.setState({
+        cca2: this.props.cca2,
+        dataSource: regionList,
+        flatListMap: regionList.map(n => ({ key: n }))
+      })
     }
+  }
 
   onSelectRegion(selectedRegion) {
     this.setState({
