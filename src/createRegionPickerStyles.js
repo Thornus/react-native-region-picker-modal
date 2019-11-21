@@ -9,7 +9,7 @@ export default function createRegionPickerStyles(customStyles) {
     stylesObject = merge(defaultStyles, customStyles);
   }
 
-   StyleSheet.create(stylesObject);
+  return StyleSheet.create(stylesObject);
 };
 
 let defaultStyles = {
