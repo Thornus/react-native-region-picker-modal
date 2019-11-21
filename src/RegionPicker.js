@@ -92,7 +92,7 @@ export default class RegionPicker extends Component {
     animationType: 'none'
   }
 
-  static renderEmojiFlag(cca2, emojiStyle) {
+  renderEmojiFlag(cca2, emojiStyle) {
     return (
       <Text style={[this.regionPickerStyles.emojiFlag, emojiStyle]} allowFontScaling={false}>
         { // TO DO: pass right string to show flag
@@ -103,7 +103,7 @@ export default class RegionPicker extends Component {
     )
   }
 
-  static renderImageFlag(cca2, imageStyle) {
+  renderImageFlag(cca2, imageStyle) {
     return cca2 !== '' ? (
       <Image
         resizeMode={'contain'}
@@ -113,23 +113,23 @@ export default class RegionPicker extends Component {
     ) : null
   }
 
-  static renderFlag(cca2, itemStyle, emojiStyle, imageStyle) {
+  renderFlag(cca2, itemStyle, emojiStyle, imageStyle) {
     return (
       <View style={[this.regionPickerStyles.itemCountryFlag, itemStyle]}>
         {isEmojiable
-          ? RegionPicker.renderEmojiFlag(cca2, emojiStyle)
-          : RegionPicker.renderImageFlag(cca2, imageStyle)}
+          ? this.renderEmojiFlag(cca2, emojiStyle)
+          : this.renderImageFlag(cca2, imageStyle)}
       </View>
     )
   }
 
-  static renderFlagWithName(cca2, regionName, itemStyle, emojiStyle, imageStyle) {
+  renderFlagWithName(cca2, regionName, itemStyle, emojiStyle, imageStyle) {
     return (
       <View style={{flexDirection:'row', flexWrap:'wrap',alignItems: "center",}}>
         <View style={[this.regionPickerStyles.itemCountryFlag, itemStyle]}>
           {isEmojiable
-            ? RegionPicker.renderEmojiFlag(cca2, emojiStyle)
-            : RegionPicker.renderImageFlag(cca2, imageStyle)}
+            ? this.renderEmojiFlag(cca2, emojiStyle)
+            : this.renderImageFlag(cca2, imageStyle)}
 
         </View>
         <Text style={{fontSize:16}}>{regionName}</Text>
@@ -201,7 +201,7 @@ export default class RegionPicker extends Component {
     )
   }
 
-  componentDidUpdate (prevProps) {
+  componentDidUpdate(prevProps) {
     if (prevProps.cca2 !== this.props.cca2) {
       let regionList = [...countryRegionData.find(country => country.countryShortCode === this.props.cca2).regions]
       regions = regionList
@@ -341,7 +341,7 @@ export default class RegionPicker extends Component {
     return (
       <View style={styles.itemCountry}>
         {!this.props.hideCountryFlag &&
-          RegionPicker.renderFlag(selectedRegion,
+          this.renderFlag(selectedRegion,
                 styles.itemCountryFlag,
                 styles.emojiFlag,
                 styles.imgStyle)}
@@ -396,12 +396,12 @@ export default class RegionPicker extends Component {
             <View
               style={[styles.touchFlag, { marginTop: isEmojiable ? 0 : 5 }]}
             >
-              {this.props.showRegionNameWithFlag && RegionPicker.renderFlagWithName(this.props.cca2, this.getRegionName(this.props.selectedRegion),
+              {this.props.showRegionNameWithFlag && this.renderFlagWithName(this.props.cca2, this.getRegionName(this.props.selectedRegion),
                 styles.itemCountryFlag,
                 styles.emojiFlag,
                 styles.imgStyle)}
 
-              {!this.props.showRegionNameWithFlag && RegionPicker.renderFlag(this.props.cca2,
+              {!this.props.showRegionNameWithFlag && this.renderFlag(this.props.cca2,
                 styles.itemCountryFlag,
                 styles.emojiFlag,
                 styles.imgStyle)}

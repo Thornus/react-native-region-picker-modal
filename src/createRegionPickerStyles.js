@@ -1,14 +1,15 @@
 import { StyleSheet, PixelRatio } from 'react-native'
+import merge from 'lodash.merge'
 import { getHeightPercent } from './ratio'
 
 export default function createRegionPickerStyles(customStyles) {
   let stylesObject = defaultStyles;
 
   if(customStyles) {
-    stylesObject = Object.assign({}, defaultStyles, customStyles);
+    stylesObject = merge(defaultStyles, customStyles);
   }
 
-  return StyleSheet.create(stylesObject);
+   StyleSheet.create(stylesObject);
 };
 
 let defaultStyles = {
