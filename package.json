@@ -1,6 +1,6 @@
 {
   "name": "react-native-region-picker-modal",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "description": "Region picker",
   "main": "src/RegionPicker.js",
   "types": "src/CountryPicker.d.ts",
@@ -35,7 +35,6 @@
   "dependencies": {
     "country-region-data": "^1.5.0",
     "fuse.js": "2.6.2",
-    "lodash.merge": "^4.6.2",
     "node-emoji": "1.8.1",
     "prop-types": "15.6.0",
     "react-native-safe-area-view": "^0.7.0",

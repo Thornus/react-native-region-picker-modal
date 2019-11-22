@@ -1,18 +1,7 @@
 import { StyleSheet, PixelRatio } from 'react-native'
-import merge from 'lodash.merge'
 import { getHeightPercent } from './ratio'
 
-export default function createRegionPickerStyles(customStyles) {
-  let stylesObject = defaultStyles;
-
-  if(customStyles) {
-    stylesObject = merge(defaultStyles, customStyles);
-  }
-
-  return StyleSheet.create(stylesObject);
-};
-
-let defaultStyles = {
+export default StyleSheet.create({
   container: {},
   
   modalContainer: {
@@ -134,4 +123,4 @@ let defaultStyles = {
     width: 24,
     resizeMode: 'contain'
   }
-};
+});
