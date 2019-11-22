@@ -55,6 +55,10 @@ let defaultStyles = {
     opacity: 0.8
   },
 
+  textStyle: {
+    fontSize: 16
+  },
+
   emojiFlag: {
     alignItems: 'center',
     justifyContent: 'center',
