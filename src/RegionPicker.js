@@ -20,7 +20,6 @@ import {
 
 import Fuse from 'fuse.js'
 
-import countryRegionData from 'country-region-data';
 import { getHeightPercent } from './ratio'
 import CloseButton from './CloseButton'
 import regionPickerStyles from './RegionPicker.style'
@@ -142,7 +141,8 @@ export default class RegionPicker extends Component {
     this.openModal = this.openModal.bind(this)
 
     setRegions(props.flagType)
-    let regionList = [...countryRegionData.find(country => country.countryShortCode === props.cca2).regions]
+
+    let regionList = this.props.regionList
     regions = regionList
 
     const excludeRegions = [...props.excludeRegions]
@@ -190,7 +190,7 @@ export default class RegionPicker extends Component {
       regionList.reduce(
         (acc, item) => [
           ...acc,
-          { id: item, name: this.getRegionName(this.props.selectedRegion) }
+          { id: item, name: this.getRegionName(this.props.showCities ? this.props.selectedCity : this.props.selectedRegion) }
         ],
         []
       ),
@@ -198,18 +198,18 @@ export default class RegionPicker extends Component {
     )
   }
 
-  componentDidUpdate (prevProps) {
-      if (prevProps.cca2 !== this.props.cca2) {
-        let regionList = [...countryRegionData.find(country => country.countryShortCode === this.props.cca2).regions]
-        regions = regionList
-        
-        this.setState({
-          cca2: this.props.cca2,
-          dataSource: regionList,
-          flatListMap: regionList.map(n => ({ key: n }))
-        })
-      }
+  componentDidUpdate(prevProps) {
+    if (prevProps.regionList[0].name !== this.props.regionList[0].name) {
+      let regionList = this.props.regionList
+      regions = regionList
+      
+      this.setState({
+        cca2: this.props.cca2,
+        dataSource: regionList,
+        flatListMap: regionList.map(n => ({ key: n }))
+      })
     }
+  }
 
   onSelectRegion(selectedRegion) {
     this.setState({
@@ -237,11 +237,14 @@ export default class RegionPicker extends Component {
     }
   }
 
-  getRegionName(selectedRegion, optionalTranslation) {
+  getRegionName = (selectedRegion, optionalTranslation) => {
     const translation = optionalTranslation || this.props.translation || 'eng'
 
+    const regionList = this.props.regionList;
     //find region based on selectedRegion (region code) else default to first region
-    let region = regions.find(region => region.shortCode === selectedRegion) || regions[0]
+    let region = regionList.find(region => {
+      return region.shortCode === selectedRegion 
+    }) || regionList[0]
 
     return region.name
   }
@@ -255,9 +258,7 @@ export default class RegionPicker extends Component {
       list.reduce(
         (acc, val) => ({
           ...acc,
-          [this.getRegionName(this.props.selectedRegion)
-            .slice(0, 1)
-            .toUpperCase()]: ''
+          [val.shortCode[0].toUpperCase()]: ''
         }),
         {}
       )
@@ -275,13 +276,17 @@ export default class RegionPicker extends Component {
   }
 
   scrollTo(letter) {
+    const regionList = this.props.regionList;
+
     // find position of first region that starts with letter
-    const index = regions
-      .map(region => this.getRegionName(this.props.selectedRegion))
-      .indexOf(letter)
+    const index = regionList
+      .map(region => this.getRegionName(region.shortCode)[0])
+      .indexOf(letter);
+
     if (index === -1) {
       return
     }
+    
     let position = index * this.itemHeight
 
     // do not scroll past the end of the list
@@ -393,7 +398,7 @@ export default class RegionPicker extends Component {
             <View
               style={[styles.touchFlag, { marginTop: isEmojiable ? 0 : 5 }]}
             >
-              {this.props.showRegionNameWithFlag && RegionPicker.renderFlagWithName(this.props.cca2, this.getRegionName(this.props.selectedRegion),
+              {this.props.showRegionNameWithFlag && RegionPicker.renderFlagWithName(this.props.cca2, this.getRegionName(this.props.showCities ? this.props.selectedCity : this.props.selectedRegion),
                 styles.itemCountryFlag,
                 styles.emojiFlag,
                 styles.imgStyle,
