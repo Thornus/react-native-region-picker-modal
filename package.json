@@ -1,6 +1,6 @@
 {
   "name": "react-native-region-picker-modal",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "description": "Region picker",
   "main": "src/RegionPickerWrapper.js",
   "types": "src/CountryPicker.d.ts",
