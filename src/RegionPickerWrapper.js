@@ -40,10 +40,9 @@ export default class RegionPickerWrapper extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.cca2 !== prevProps.cca2) {
+    if (this.props.cca2 !== prevProps.cca2 || this.props.selectedRegion !== prevProps.selectedRegion) {
       let regionList = [];
 
-      // console.log('showCities', this.props.showCities)
       if(this.props.showCities) {
         const regionCode = this.props.selectedRegion;
 
@@ -63,7 +62,6 @@ export default class RegionPickerWrapper extends Component {
           }
         }
       } else {
-        // console.log('the cca2', this.props.cca2)
         regionList = [...countryRegionData.find(country => country.countryShortCode === this.props.cca2).regions]
       }
 
