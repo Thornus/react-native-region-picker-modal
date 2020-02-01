@@ -124,7 +124,6 @@ export default class RegionPicker extends Component {
   }
 
   static renderFlagWithName(cca2, regionName, itemStyle, emojiStyle, imageStyle, textStyle, iconComponent) {
-    console.log(iconComponent)
     return (
       <View style={{flexDirection:'row', flexWrap:'wrap',alignItems: "center",}}>
         <View style={[regionPickerStyles.itemCountryFlag, itemStyle]}>
@@ -141,7 +140,7 @@ export default class RegionPicker extends Component {
 
   constructor(props) {
     super(props)
-    console.log(this.props.iconComponent)
+
     this.openModal = this.openModal.bind(this)
 
     setRegions(props.flagType)
@@ -389,7 +388,6 @@ export default class RegionPicker extends Component {
   }
 
   render() {
-    console.log(this.props.iconComponent)
     return (
       <View>
         <TouchableOpacity
