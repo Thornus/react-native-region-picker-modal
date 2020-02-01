@@ -78,8 +78,7 @@ export default class RegionPicker extends Component {
     hideCountryFlag: PropTypes.bool,
     renderFilter: PropTypes.func,
     filterOptions: PropTypes.object,
-    showRegionNameWithFlag: PropTypes.bool,
-    alignment: PropTypes.string
+    showRegionNameWithFlag: PropTypes.bool
   }
 
   static defaultProps = {
@@ -89,8 +88,7 @@ export default class RegionPicker extends Component {
     filterPlaceholder: 'Filter',
     autoFocusFilter: true,
     transparent: false,
-    animationType: 'none',
-    alignment: 'center'
+    animationType: 'none'
   }
 
   static renderEmojiFlag(cca2, emojiStyle) {
@@ -124,9 +122,9 @@ export default class RegionPicker extends Component {
     )
   }
 
-  static renderFlagWithName(cca2, regionName, itemStyle, emojiStyle, imageStyle, textStyle, alignment) {
+  static renderFlagWithName(cca2, regionName, itemStyle, emojiStyle, imageStyle, textStyle) {
     return (
-      <View style={{flexDirection:'row', flexWrap:'wrap', alignItems: alignment}}>
+      <View style={{flexDirection:'row', flexWrap:'wrap',alignItems: "center",}}>
         <View style={[regionPickerStyles.itemCountryFlag, itemStyle]}>
           {isEmojiable
             ? RegionPicker.renderEmojiFlag(cca2, emojiStyle)
@@ -404,8 +402,7 @@ export default class RegionPicker extends Component {
                 styles.itemCountryFlag,
                 styles.emojiFlag,
                 styles.imgStyle,
-                styles.textStyle,
-                this.props.alignment)}
+                styles.textStyle)}
 
               {!this.props.showRegionNameWithFlag && RegionPicker.renderFlag(this.props.cca2,
                 styles.itemCountryFlag,
