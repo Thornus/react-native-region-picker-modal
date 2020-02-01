@@ -74,32 +74,8 @@ export default class RegionPickerWrapper extends Component {
 
     return(
     <RegionPicker
-      showCities={this.props.showCities}
-      onClose={this.props.onClose}
-      onChange={this.props.onChange}
       regionList={regionList}
-      closeable={this.props.closeable}
-      filterable={this.props.filterable}
-      filterPlaceholder={this.props.filterPlaceholder}
-      filterPlaceholderTextColor={this.props.filterPlaceholderTextColor}
-      autoFocusFilter={this.props.autoFocusFilter}
-      disabled={this.props.disabled}
-      transparent={this.props.transparent}
-      animationType={this.props.animationType}
-      closeButtonImage={this.props.closeButtonImage}
-      flagType={this.props.flagType}
-      hideAlphabetFilter={this.props.hideAlphabetFilter}
-      showCallingCode={this.props.showCallingCode}
-      renderFilter={this.props.renderFilter}
-      excludeCountries={this.props.excludeCountries}
-      showRegionNameWithFlag={this.props.showRegionNameWithFlag}
-      hideFlag={this.props.hideFlag}
-      transparent={this.props.transparent}
-      cca2={this.props.cca2}
-      selectedRegion={this.props.selectedRegion}
-      selectedCity={this.props.selectedCity}
-      translation={this.props.translation}
-      styles={this.props.styles}
+      {...this.props}
     />
     );
   }
